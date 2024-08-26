@@ -1,4 +1,3 @@
-
 class TrafficLight {
     private String color;
     private int timer;
@@ -51,12 +50,20 @@ public class TrafficLightSystemSimulation {
     public static void main(String[] args) {
         TrafficLight light1 = new TrafficLight("red", 60);
         TrafficLight light2 = new TrafficLight("green", 45);
+        TrafficLight light3 = new TrafficLight("yellow", 30);
+        TrafficLight light4 = new TrafficLight("red", 50);
 
-        TrafficLight[] lights = { light1, light2 };
+        TrafficLight[] lights1 = { light1, light2 };
 
-        Intersection intersection1 = new Intersection(lights, "5th Avenue");
+        TrafficLight[] lights2 = { light3, light4 };
+
+        Intersection intersection1 = new Intersection(lights1, "5th Avenue");
+        Intersection intersection2 = new Intersection(lights2, "Main Street");
 
         intersection1.manageTraffic();
         intersection1.reportStatus();
+
+        intersection2.manageTraffic();
+        intersection2.reportStatus();
     }
 }
