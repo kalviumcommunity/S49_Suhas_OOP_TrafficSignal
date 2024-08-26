@@ -1,4 +1,3 @@
-
 class TrafficLight {
     private String color;
     private int timer;
