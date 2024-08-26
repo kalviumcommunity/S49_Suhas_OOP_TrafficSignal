@@ -1,10 +1,11 @@
+
 class TrafficLight {
     private String color;
     private int timer;
 
     public TrafficLight(String initialColor, int initialTimer) {
-        color = initialColor;
-        timer = initialTimer;
+        this.color = initialColor;
+        this.timer = initialTimer;
     }
 
     public void changeColor() {
@@ -28,8 +29,8 @@ class Intersection {
     private String location;
 
     public Intersection(TrafficLight[] lights, String loc) {
-        trafficLights = lights;
-        location = loc;
+        this.trafficLights = lights;
+        this.location = loc;
     }
 
     public void manageTraffic() {
@@ -48,7 +49,6 @@ class Intersection {
 
 public class TrafficLightSystemSimulation {
     public static void main(String[] args) {
-        
         TrafficLight light1 = new TrafficLight("red", 60);
         TrafficLight light2 = new TrafficLight("green", 45);
 
