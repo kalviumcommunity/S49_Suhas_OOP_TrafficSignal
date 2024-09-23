@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 class TrafficLight {
     private String color;
     private int timer;
@@ -15,7 +17,7 @@ class TrafficLight {
         } else if (color.equals("yellow")) {
             color = "red";
         }
-        timer = 60; 
+        timer = 60;
     }
 
     public void displayStatus() {
@@ -48,22 +50,57 @@ class Intersection {
 
 public class TrafficLightSystemSimulation {
     public static void main(String[] args) {
-        TrafficLight light1 = new TrafficLight("red", 60);
-        TrafficLight light2 = new TrafficLight("green", 45);
-        TrafficLight light3 = new TrafficLight("yellow", 30);
-        TrafficLight light4 = new TrafficLight("red", 50);
+        Scanner scanner = new Scanner(System.in);
 
-        TrafficLight[] lights1 = { light1, light2 };
+        System.out.println("Enter the location for the first intersection:");
+        String location1 = scanner.nextLine();
 
-        TrafficLight[] lights2 = { light3, light4 };
+        System.out.println("Enter the number of traffic lights for " + location1 + ":");
+        int numLights1 = scanner.nextInt();
+        scanner.nextLine();
 
-        Intersection intersection1 = new Intersection(lights1, "5th Avenue");
-        Intersection intersection2 = new Intersection(lights2, "Main Street");
+        TrafficLight[] lights1 = new TrafficLight[numLights1];
+
+        for (int i = 0; i < numLights1; i++) {
+            System.out.println("Enter the initial color of traffic light " + (i + 1) + " (red, green, yellow):");
+            String color = scanner.nextLine();
+
+            System.out.println("Enter the timer for traffic light " + (i + 1) + " in seconds:");
+            int timer = scanner.nextInt();
+            scanner.nextLine();
+
+            lights1[i] = new TrafficLight(color, timer);
+        }
+
+        System.out.println("Enter the location for the second intersection:");
+        String location2 = scanner.nextLine();
+
+        System.out.println("Enter the number of traffic lights for " + location2 + ":");
+        int numLights2 = scanner.nextInt();
+        scanner.nextLine();
+
+        TrafficLight[] lights2 = new TrafficLight[numLights2];
+
+        for (int i = 0; i < numLights2; i++) {
+            System.out.println("Enter the initial color of traffic light " + (i + 1) + " (red, green, yellow):");
+            String color = scanner.nextLine();
+
+            System.out.println("Enter the timer for traffic light " + (i + 1) + " in seconds:");
+            int timer = scanner.nextInt();
+            scanner.nextLine();
+
+            lights2[i] = new TrafficLight(color, timer);
+        }
+
+        Intersection intersection1 = new Intersection(lights1, location1);
+        Intersection intersection2 = new Intersection(lights2, location2);
 
         intersection1.manageTraffic();
         intersection1.reportStatus();
 
         intersection2.manageTraffic();
         intersection2.reportStatus();
+
+        scanner.close();
     }
 }
