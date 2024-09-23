@@ -27,6 +27,10 @@ class TrafficLight {
     public void displayStatus() {
         System.out.println("Traffic Light is " + color + " with " + timer + " seconds remaining.");
     }
+
+    public static void displayTotalLights() {
+        System.out.println("Total number of traffic lights created: " + totalLights);
+    }
 }
 
 class Intersection {
@@ -44,16 +48,17 @@ class Intersection {
         }
     }
 
-    public void reportStatus() {
+    public void reportStatus() throws InterruptedException {
         System.out.println("Intersection at " + location + ":");
         for (TrafficLight light : trafficLights) {
             light.displayStatus();
+            Thread.sleep(1000);  // Add 1-second delay between each status report
         }
     }
 }
 
 public class TrafficLightSystemSimulation {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter the global timer value for all traffic lights:");
@@ -109,7 +114,7 @@ public class TrafficLightSystemSimulation {
         intersection2.manageTraffic();
         intersection2.reportStatus();
 
-        System.out.println("Total number of traffic lights created: " + TrafficLight.totalLights);
+        TrafficLight.displayTotalLights();
 
         scanner.close();
     }
