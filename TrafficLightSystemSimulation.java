@@ -4,9 +4,13 @@ class TrafficLight {
     private String color;
     private int timer;
 
+    public static int globalTimer = 60;
+    public static int totalLights = 0;
+
     public TrafficLight(String initialColor, int initialTimer) {
         this.color = initialColor;
         this.timer = initialTimer;
+        totalLights++;
     }
 
     public void changeColor() {
@@ -17,7 +21,7 @@ class TrafficLight {
         } else if (color.equals("yellow")) {
             color = "red";
         }
-        timer = 60;
+        timer = globalTimer;
     }
 
     public void displayStatus() {
@@ -51,6 +55,10 @@ class Intersection {
 public class TrafficLightSystemSimulation {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the global timer value for all traffic lights:");
+        TrafficLight.globalTimer = scanner.nextInt();
+        scanner.nextLine();
 
         System.out.println("Enter the location for the first intersection:");
         String location1 = scanner.nextLine();
@@ -100,6 +108,8 @@ public class TrafficLightSystemSimulation {
 
         intersection2.manageTraffic();
         intersection2.reportStatus();
+
+        System.out.println("Total number of traffic lights created: " + TrafficLight.totalLights);
 
         scanner.close();
     }
