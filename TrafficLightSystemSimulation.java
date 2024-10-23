@@ -8,7 +8,12 @@ class TrafficLight {
     public static int globalTimer = DEFAULT_GLOBAL_TIMER;
     public static int totalLights = 0;
 
-    
+    public TrafficLight() {
+        this.color = "red"; 
+        this.timer = DEFAULT_GLOBAL_TIMER; 
+        totalLights++;
+    }
+
     public TrafficLight(String initialColor, int initialTimer) {
         this.color = initialColor;
         this.timer = initialTimer;
@@ -56,6 +61,11 @@ class TrafficLight {
     public static void displayTotalLights() {
         System.out.println("Total number of traffic lights created: " + totalLights);
     }
+
+    public void cleanup() {
+        System.out.println("Traffic Light at " + color + " with timer " + timer + " is being removed.");
+        totalLights--;
+    }
 }
 
 class Intersection {
@@ -86,6 +96,12 @@ class Intersection {
         for (TrafficLight light : trafficLights) {
             light.displayStatus();
             Thread.sleep(1000); 
+        }
+    }
+
+    public void cleanupTrafficLights() {
+        for (TrafficLight light : trafficLights) {
+            light.cleanup();
         }
     }
 }
@@ -169,6 +185,9 @@ public class TrafficLightSystemSimulation {
         intersection2.reportStatus();
 
         TrafficLight.displayTotalLights();
+
+        intersection1.cleanupTrafficLights();
+        intersection2.cleanupTrafficLights();
 
         scanner.close();
     }
