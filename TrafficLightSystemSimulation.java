@@ -4,43 +4,47 @@ class TrafficLight {
     private String color;
     private int timer;
 
-    public static int globalTimer = 60;
+    public static final int DEFAULT_GLOBAL_TIMER = 60; 
+    public static int globalTimer = DEFAULT_GLOBAL_TIMER;
     public static int totalLights = 0;
 
-    // Constructor
+    
     public TrafficLight(String initialColor, int initialTimer) {
         this.color = initialColor;
         this.timer = initialTimer;
         totalLights++;
     }
 
-    // Accessor (getter) for color
     public String getColor() {
         return color;
     }
 
-    // Mutator (setter) for color
     public void setColor(String color) {
         this.color = color;
     }
 
-    // Accessor (getter) for timer
     public int getTimer() {
         return timer;
     }
 
-    // Mutator (setter) for timer
     public void setTimer(int timer) {
         this.timer = timer;
     }
 
     public void changeColor() {
-        if (color.equals("red")) {
-            color = "green";
-        } else if (color.equals("green")) {
-            color = "yellow";
-        } else if (color.equals("yellow")) {
-            color = "red";
+        switch (color) {
+            case "red":
+                color = "green";
+                break;
+            case "green":
+                color = "yellow";
+                break;
+            case "yellow":
+                color = "red";
+                break;
+            default:
+                System.out.println("Invalid color! Setting to red by default.");
+                color = "red";
         }
         timer = globalTimer;
     }
@@ -58,18 +62,15 @@ class Intersection {
     private TrafficLight[] trafficLights;
     private String location;
 
-    // Constructor
     public Intersection(TrafficLight[] lights, String loc) {
         this.trafficLights = lights;
         this.location = loc;
     }
 
-    // Accessor (getter) for location
     public String getLocation() {
         return location;
     }
 
-    // Mutator (setter) for location
     public void setLocation(String location) {
         this.location = location;
     }
@@ -84,7 +85,7 @@ class Intersection {
         System.out.println("Intersection at " + location + ":");
         for (TrafficLight light : trafficLights) {
             light.displayStatus();
-            Thread.sleep(1000);  // Add 1-second delay between each status report
+            Thread.sleep(1000); 
         }
     }
 }
@@ -93,8 +94,9 @@ public class TrafficLightSystemSimulation {
     public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter the global timer value for all traffic lights:");
-        TrafficLight.globalTimer = scanner.nextInt();
+        System.out.println("Enter the global timer value for all traffic lights (default is " + TrafficLight.DEFAULT_GLOBAL_TIMER + "):");
+        int globalTimerInput = scanner.nextInt();
+        TrafficLight.globalTimer = globalTimerInput > 0 ? globalTimerInput : TrafficLight.DEFAULT_GLOBAL_TIMER; // Validate input
         scanner.nextLine();
 
         System.out.println("Enter the location for the first intersection:");
@@ -108,11 +110,21 @@ public class TrafficLightSystemSimulation {
 
         for (int i = 0; i < numLights1; i++) {
             System.out.println("Enter the initial color of traffic light " + (i + 1) + " (red, green, yellow):");
-            String color = scanner.nextLine();
+            String color = scanner.nextLine().toLowerCase();
 
             System.out.println("Enter the timer for traffic light " + (i + 1) + " in seconds:");
             int timer = scanner.nextInt();
             scanner.nextLine();
+
+            while (!color.equals("red") && !color.equals("green") && !color.equals("yellow")) {
+                System.out.println("Invalid color! Please enter red, green, or yellow:");
+                color = scanner.nextLine().toLowerCase();
+            }
+
+            if (timer <= 0) {
+                System.out.println("Invalid timer! Setting timer to default value of 60 seconds.");
+                timer = 60;
+            }
 
             lights1[i] = new TrafficLight(color, timer);
         }
@@ -128,11 +140,21 @@ public class TrafficLightSystemSimulation {
 
         for (int i = 0; i < numLights2; i++) {
             System.out.println("Enter the initial color of traffic light " + (i + 1) + " (red, green, yellow):");
-            String color = scanner.nextLine();
+            String color = scanner.nextLine().toLowerCase();
 
             System.out.println("Enter the timer for traffic light " + (i + 1) + " in seconds:");
             int timer = scanner.nextInt();
             scanner.nextLine();
+
+            while (!color.equals("red") && !color.equals("green") && !color.equals("yellow")) {
+                System.out.println("Invalid color! Please enter red, green, or yellow:");
+                color = scanner.nextLine().toLowerCase();
+            }
+
+            if (timer <= 0) {
+                System.out.println("Invalid timer! Setting timer to default value of 60 seconds.");
+                timer = 60;
+            }
 
             lights2[i] = new TrafficLight(color, timer);
         }
