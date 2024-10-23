@@ -7,10 +7,31 @@ class TrafficLight {
     public static int globalTimer = 60;
     public static int totalLights = 0;
 
+    // Constructor
     public TrafficLight(String initialColor, int initialTimer) {
         this.color = initialColor;
         this.timer = initialTimer;
         totalLights++;
+    }
+
+    // Accessor (getter) for color
+    public String getColor() {
+        return color;
+    }
+
+    // Mutator (setter) for color
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    // Accessor (getter) for timer
+    public int getTimer() {
+        return timer;
+    }
+
+    // Mutator (setter) for timer
+    public void setTimer(int timer) {
+        this.timer = timer;
     }
 
     public void changeColor() {
@@ -37,9 +58,20 @@ class Intersection {
     private TrafficLight[] trafficLights;
     private String location;
 
+    // Constructor
     public Intersection(TrafficLight[] lights, String loc) {
         this.trafficLights = lights;
         this.location = loc;
+    }
+
+    // Accessor (getter) for location
+    public String getLocation() {
+        return location;
+    }
+
+    // Mutator (setter) for location
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public void manageTraffic() {
