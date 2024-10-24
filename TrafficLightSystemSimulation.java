@@ -1,8 +1,8 @@
 import java.util.Scanner;
 
 class TrafficLight {
-    private String color;
-    private int timer;
+    protected String color;
+    protected int timer;
 
     public static final int DEFAULT_GLOBAL_TIMER = 60; 
     public static int globalTimer = DEFAULT_GLOBAL_TIMER;
@@ -68,9 +68,47 @@ class TrafficLight {
     }
 }
 
+class PedestrianLight extends TrafficLight {
+    private boolean walkSignal;
+
+    public PedestrianLight() {
+        super("red", DEFAULT_GLOBAL_TIMER); 
+        this.walkSignal = false;
+    }
+
+    public void changeSignal() {
+        walkSignal = !walkSignal;
+        if (walkSignal) {
+            System.out.println("Pedestrian Light: Walk signal ON.");
+        } else {
+            System.out.println("Pedestrian Light: Walk signal OFF.");
+        }
+    }
+
+    @Override
+    public void displayStatus() {
+        super.displayStatus();
+        System.out.println("Pedestrian walk signal: " + (walkSignal ? "ON" : "OFF"));
+    }
+}
+
+class SmartIntersection extends Intersection {
+    public SmartIntersection(TrafficLight[] lights, String loc) {
+        super(lights, loc);
+    }
+
+    public void optimizeTraffic() {
+        System.out.println("Optimizing traffic at smart intersection: " + getLocation());
+        for (TrafficLight light : trafficLights) {
+            light.setTimer(30); 
+            light.displayStatus();
+        }
+    }
+}
+
 class Intersection {
-    private TrafficLight[] trafficLights;
-    private String location;
+    protected TrafficLight[] trafficLights;
+    protected String location;
 
     public Intersection(TrafficLight[] lights, String loc) {
         this.trafficLights = lights;
@@ -110,85 +148,23 @@ public class TrafficLightSystemSimulation {
     public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter the global timer value for all traffic lights (default is " + TrafficLight.DEFAULT_GLOBAL_TIMER + "):");
-        int globalTimerInput = scanner.nextInt();
-        TrafficLight.globalTimer = globalTimerInput > 0 ? globalTimerInput : TrafficLight.DEFAULT_GLOBAL_TIMER; // Validate input
-        scanner.nextLine();
+        System.out.println("Enter the location for the intersection:");
+        String location = scanner.nextLine();
 
-        System.out.println("Enter the location for the first intersection:");
-        String location1 = scanner.nextLine();
+        TrafficLight[] lights = new TrafficLight[2];
+        lights[0] = new TrafficLight("green", 45);
+        lights[1] = new PedestrianLight();  
 
-        System.out.println("Enter the number of traffic lights for " + location1 + ":");
-        int numLights1 = scanner.nextInt();
-        scanner.nextLine();
+        SmartIntersection intersection = new SmartIntersection(lights, location);
 
-        TrafficLight[] lights1 = new TrafficLight[numLights1];
+        intersection.manageTraffic();
+        intersection.reportStatus();
 
-        for (int i = 0; i < numLights1; i++) {
-            System.out.println("Enter the initial color of traffic light " + (i + 1) + " (red, green, yellow):");
-            String color = scanner.nextLine().toLowerCase();
-
-            System.out.println("Enter the timer for traffic light " + (i + 1) + " in seconds:");
-            int timer = scanner.nextInt();
-            scanner.nextLine();
-
-            while (!color.equals("red") && !color.equals("green") && !color.equals("yellow")) {
-                System.out.println("Invalid color! Please enter red, green, or yellow:");
-                color = scanner.nextLine().toLowerCase();
-            }
-
-            if (timer <= 0) {
-                System.out.println("Invalid timer! Setting timer to default value of 60 seconds.");
-                timer = 60;
-            }
-
-            lights1[i] = new TrafficLight(color, timer);
-        }
-
-        System.out.println("Enter the location for the second intersection:");
-        String location2 = scanner.nextLine();
-
-        System.out.println("Enter the number of traffic lights for " + location2 + ":");
-        int numLights2 = scanner.nextInt();
-        scanner.nextLine();
-
-        TrafficLight[] lights2 = new TrafficLight[numLights2];
-
-        for (int i = 0; i < numLights2; i++) {
-            System.out.println("Enter the initial color of traffic light " + (i + 1) + " (red, green, yellow):");
-            String color = scanner.nextLine().toLowerCase();
-
-            System.out.println("Enter the timer for traffic light " + (i + 1) + " in seconds:");
-            int timer = scanner.nextInt();
-            scanner.nextLine();
-
-            while (!color.equals("red") && !color.equals("green") && !color.equals("yellow")) {
-                System.out.println("Invalid color! Please enter red, green, or yellow:");
-                color = scanner.nextLine().toLowerCase();
-            }
-
-            if (timer <= 0) {
-                System.out.println("Invalid timer! Setting timer to default value of 60 seconds.");
-                timer = 60;
-            }
-
-            lights2[i] = new TrafficLight(color, timer);
-        }
-
-        Intersection intersection1 = new Intersection(lights1, location1);
-        Intersection intersection2 = new Intersection(lights2, location2);
-
-        intersection1.manageTraffic();
-        intersection1.reportStatus();
-
-        intersection2.manageTraffic();
-        intersection2.reportStatus();
-
+        intersection.optimizeTraffic();
+        
         TrafficLight.displayTotalLights();
-
-        intersection1.cleanupTrafficLights();
-        intersection2.cleanupTrafficLights();
-
+        
+        intersection.cleanupTrafficLights();
         scanner.close();
     }
 }
