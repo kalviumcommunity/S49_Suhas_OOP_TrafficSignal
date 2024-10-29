@@ -152,7 +152,7 @@ public class TrafficLightSystemSimulation {
         String location = scanner.nextLine();
 
         TrafficLight[] lights = new TrafficLight[2];
-        lights[0] = new TrafficLight("green", 45);
+        lights[0] = new TrafficLight("green", 45);  
         lights[1] = new PedestrianLight();  
 
         SmartIntersection intersection = new SmartIntersection(lights, location);
