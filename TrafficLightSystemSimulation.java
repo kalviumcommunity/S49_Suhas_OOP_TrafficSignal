@@ -1,11 +1,19 @@
 import java.util.Scanner;
 
-class TrafficLight {
+
+abstract class BaseLight {
     protected String color;
     protected int timer;
 
+    public abstract void changeColor(); 
+
+    public abstract void displayStatus(); 
+}
+
+
+class TrafficLight extends BaseLight {
     public static final int DEFAULT_GLOBAL_TIMER = 60;
-    private static int globalTimer = DEFAULT_GLOBAL_TIMER; // Made private for encapsulation
+    private static int globalTimer = DEFAULT_GLOBAL_TIMER; 
     public static int totalLights = 0;
 
     public TrafficLight() {
@@ -44,6 +52,7 @@ class TrafficLight {
         TrafficLight.globalTimer = globalTimer;
     }
 
+    @Override
     public void changeColor() {
         switch (color) {
             case "red":
@@ -62,6 +71,7 @@ class TrafficLight {
         timer = globalTimer;
     }
 
+    @Override
     public void displayStatus() {
         System.out.println("Traffic Light is " + color + " with " + timer + " seconds remaining.");
     }
@@ -77,11 +87,12 @@ class TrafficLight {
 }
 
 
-class PedestrianLight extends TrafficLight {
+class PedestrianLight extends BaseLight {
     private boolean walkSignal;
 
     public PedestrianLight() {
-        super("red", DEFAULT_GLOBAL_TIMER);
+        this.color = "red";
+        this.timer = TrafficLight.DEFAULT_GLOBAL_TIMER;
         this.walkSignal = false;
     }
 
@@ -95,19 +106,25 @@ class PedestrianLight extends TrafficLight {
     }
 
     @Override
+    public void changeColor() {
+        // Pedestrian lights don't cycle colors like traffic lights
+        System.out.println("Pedestrian Light doesn't change color.");
+    }
+
+    @Override
     public void displayStatus() {
-        super.displayStatus();
+        System.out.println("Pedestrian Light is " + color + " with " + timer + " seconds remaining.");
         System.out.println("Pedestrian walk signal: " + (walkSignal ? "ON" : "OFF"));
     }
 }
 
 
 class Intersection {
-    protected TrafficLight[] trafficLights;
+    protected BaseLight[] lights;
     protected String location;
 
-    public Intersection(TrafficLight[] lights, String loc) {
-        this.trafficLights = lights;
+    public Intersection(BaseLight[] lights, String loc) {
+        this.lights = lights;
         this.location = loc;
     }
 
@@ -120,43 +137,41 @@ class Intersection {
     }
 
     public void manageTraffic() {
-        for (TrafficLight light : trafficLights) {
+        for (BaseLight light : lights) {
             light.changeColor();
         }
     }
 
     public void reportStatus() throws InterruptedException {
         System.out.println("Intersection at " + location + ":");
-        for (TrafficLight light : trafficLights) {
+        for (BaseLight light : lights) {
             light.displayStatus();
-            Thread.sleep(1000); // 1-second delay for each light's status display
+            Thread.sleep(1000); 
         }
     }
 
     public void cleanupTrafficLights() {
-        for (TrafficLight light : trafficLights) {
-            light.cleanup();
+        for (BaseLight light : lights) {
+            System.out.println("Cleaning up light...");
         }
     }
 }
 
-
 class SmartIntersection extends Intersection {
-    public SmartIntersection(TrafficLight[] lights, String loc) {
+    public SmartIntersection(BaseLight[] lights, String loc) {
         super(lights, loc);
     }
 
     public void optimizeTraffic() {
         System.out.println("Optimizing traffic at smart intersection: " + getLocation());
-        for (TrafficLight light : trafficLights) {
-
-            light.setTimer(30); 
-            light.setTimer(30); // Reduce timer for faster flow
+        for (BaseLight light : lights) {
+            if (light instanceof TrafficLight) {
+                ((TrafficLight) light).setTimer(30); 
+            }
             light.displayStatus();
         }
     }
 }
-
 
 class IntersectionUI {
     private final Scanner scanner = new Scanner(System.in);
@@ -171,23 +186,15 @@ class IntersectionUI {
     }
 }
 
-
-
-
 public class TrafficLightSystemSimulation {
     public static void main(String[] args) throws InterruptedException {
         IntersectionUI ui = new IntersectionUI();
 
         String location = ui.getLocationInput();
 
-        TrafficLight[] lights = new TrafficLight[2];
-        AbstractclassandVirtualFunction
+        BaseLight[] lights = new BaseLight[2];
         lights[0] = new TrafficLight("green", 45);
         lights[1] = new PedestrianLight();
-
-        lights[0] = new TrafficLight("green", 45);  
-        lights[1] = new PedestrianLight();  
-        main
 
         SmartIntersection intersection = new SmartIntersection(lights, location);
 
