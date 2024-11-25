@@ -1,20 +1,20 @@
 import java.util.Scanner;
 
-
+// Base class for all types of lights
 abstract class BaseLight {
     protected String color;
     protected int timer;
 
-    public abstract void changeColor(); 
+    public abstract void changeColor(); // Abstract method to change light color
 
-    public abstract void displayStatus(); 
+    public abstract void displayStatus(); // Abstract method to display light status
 }
 
-
+// Traffic Light class
 class TrafficLight extends BaseLight {
     public static final int DEFAULT_GLOBAL_TIMER = 60;
-    private static int globalTimer = DEFAULT_GLOBAL_TIMER; 
-    public static int totalLights = 0;
+    private static int globalTimer = DEFAULT_GLOBAL_TIMER; // Static timer shared across all traffic lights
+    public static int totalLights = 0; // Counter for total traffic lights created
 
     public TrafficLight() {
         this.color = "red";
@@ -86,9 +86,9 @@ class TrafficLight extends BaseLight {
     }
 }
 
-
+// Pedestrian Light class
 class PedestrianLight extends BaseLight {
-    private boolean walkSignal;
+    private boolean walkSignal; // True if walk signal is ON, false otherwise
 
     public PedestrianLight() {
         this.color = "red";
@@ -98,17 +98,19 @@ class PedestrianLight extends BaseLight {
 
     public void changeSignal() {
         walkSignal = !walkSignal;
-        if (walkSignal) {
-            System.out.println("Pedestrian Light: Walk signal ON.");
-        } else {
-            System.out.println("Pedestrian Light: Walk signal OFF.");
-        }
+        System.out.println("Pedestrian Light: Walk signal " + (walkSignal ? "ON" : "OFF"));
     }
 
     @Override
     public void changeColor() {
-        // Pedestrian lights don't cycle colors like traffic lights
-        System.out.println("Pedestrian Light doesn't change color.");
+        // Cycles between red and green for pedestrian light
+        if (color.equals("red")) {
+            color = "green";
+        } else {
+            color = "red";
+        }
+        System.out.println("Pedestrian Light changed to " + color);
+        changeSignal(); // Update walk signal when color changes
     }
 
     @Override
@@ -118,9 +120,9 @@ class PedestrianLight extends BaseLight {
     }
 }
 
-
+// Intersection class managing multiple lights
 class Intersection {
-    protected BaseLight[] lights;
+    protected BaseLight[] lights; // Array of lights at the intersection
     protected String location;
 
     public Intersection(BaseLight[] lights, String loc) {
@@ -146,7 +148,7 @@ class Intersection {
         System.out.println("Intersection at " + location + ":");
         for (BaseLight light : lights) {
             light.displayStatus();
-            Thread.sleep(1000); 
+            Thread.sleep(1000); // 1-second delay for each light's status display
         }
     }
 
@@ -157,6 +159,7 @@ class Intersection {
     }
 }
 
+// Smart Intersection with advanced traffic management
 class SmartIntersection extends Intersection {
     public SmartIntersection(BaseLight[] lights, String loc) {
         super(lights, loc);
@@ -166,13 +169,14 @@ class SmartIntersection extends Intersection {
         System.out.println("Optimizing traffic at smart intersection: " + getLocation());
         for (BaseLight light : lights) {
             if (light instanceof TrafficLight) {
-                ((TrafficLight) light).setTimer(30); 
+                ((TrafficLight) light).setTimer(30); // Set shorter timer for faster traffic flow
             }
             light.displayStatus();
         }
     }
 }
 
+// UI for interaction with the user
 class IntersectionUI {
     private final Scanner scanner = new Scanner(System.in);
 
@@ -186,16 +190,20 @@ class IntersectionUI {
     }
 }
 
+// Main simulation class
 public class TrafficLightSystemSimulation {
     public static void main(String[] args) throws InterruptedException {
         IntersectionUI ui = new IntersectionUI();
 
+        // Get location input from the user
         String location = ui.getLocationInput();
 
+        // Create array of lights for the intersection
         BaseLight[] lights = new BaseLight[2];
-        lights[0] = new TrafficLight("green", 45);
-        lights[1] = new PedestrianLight();
+        lights[0] = new TrafficLight("green", 45); // Regular traffic light
+        lights[1] = new PedestrianLight(); // Pedestrian light
 
+        // Create a smart intersection with the lights
         SmartIntersection intersection = new SmartIntersection(lights, location);
 
         System.out.println("Managing basic traffic flow:");
