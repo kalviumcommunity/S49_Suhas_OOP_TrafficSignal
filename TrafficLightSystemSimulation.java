@@ -68,6 +68,7 @@ class TrafficLight {
     }
 }
 
+// Class to manage pedestrian light behavior
 class PedestrianLight extends TrafficLight {
     private boolean walkSignal;
 
@@ -92,20 +93,7 @@ class PedestrianLight extends TrafficLight {
     }
 }
 
-class SmartIntersection extends Intersection {
-    public SmartIntersection(TrafficLight[] lights, String loc) {
-        super(lights, loc);
-    }
-
-    public void optimizeTraffic() {
-        System.out.println("Optimizing traffic at smart intersection: " + getLocation());
-        for (TrafficLight light : trafficLights) {
-            light.setTimer(30); 
-            light.displayStatus();
-        }
-    }
-}
-
+// Class to manage intersection location and basic traffic light functionality
 class Intersection {
     protected TrafficLight[] trafficLights;
     protected String location;
@@ -144,12 +132,41 @@ class Intersection {
     }
 }
 
+// Class to manage traffic optimization for a smart intersection
+class SmartIntersection extends Intersection {
+    public SmartIntersection(TrafficLight[] lights, String loc) {
+        super(lights, loc);
+    }
+
+    public void optimizeTraffic() {
+        System.out.println("Optimizing traffic at smart intersection: " + getLocation());
+        for (TrafficLight light : trafficLights) {
+            light.setTimer(30); 
+            light.displayStatus();
+        }
+    }
+}
+
+// Utility class for interaction (Separate Responsibility)
+class IntersectionUI {
+    private final Scanner scanner = new Scanner(System.in);
+
+    public String getLocationInput() {
+        System.out.println("Enter the location for the intersection:");
+        return scanner.nextLine();
+    }
+
+    public void closeScanner() {
+        scanner.close();
+    }
+}
+
+// Main class for simulation
 public class TrafficLightSystemSimulation {
     public static void main(String[] args) throws InterruptedException {
-        Scanner scanner = new Scanner(System.in);
+        IntersectionUI ui = new IntersectionUI();
 
-        System.out.println("Enter the location for the intersection:");
-        String location = scanner.nextLine();
+        String location = ui.getLocationInput();
 
         TrafficLight[] lights = new TrafficLight[2];
         lights[0] = new TrafficLight("green", 45);  
@@ -165,6 +182,6 @@ public class TrafficLightSystemSimulation {
         TrafficLight.displayTotalLights();
         
         intersection.cleanupTrafficLights();
-        scanner.close();
+        ui.closeScanner();
     }
 }
