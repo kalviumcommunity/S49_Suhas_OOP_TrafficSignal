@@ -10,12 +10,11 @@ abstract class BaseLight {
     public abstract void displayStatus(); // Abstract method to display light status
 }
 
-// Traffic Light class
+
 class TrafficLight extends BaseLight {
     public static final int DEFAULT_GLOBAL_TIMER = 60;
-    private static int globalTimer = DEFAULT_GLOBAL_TIMER; // Static timer shared across all traffic lights
-    public static int totalLights = 0; // Counter for total traffic lights created
-
+    private static int globalTimer = DEFAULT_GLOBAL_TIMER; 
+    public static int totalLights = 0; 
     public TrafficLight() {
         this.color = "red";
         this.timer = DEFAULT_GLOBAL_TIMER;
@@ -86,9 +85,9 @@ class TrafficLight extends BaseLight {
     }
 }
 
-// Pedestrian Light class
+
 class PedestrianLight extends BaseLight {
-    private boolean walkSignal; // True if walk signal is ON, false otherwise
+    private boolean walkSignal; 
 
     public PedestrianLight() {
         this.color = "red";
@@ -159,7 +158,7 @@ class Intersection {
     }
 }
 
-// Smart Intersection with advanced traffic management
+
 class SmartIntersection extends Intersection {
     public SmartIntersection(BaseLight[] lights, String loc) {
         super(lights, loc);
@@ -169,7 +168,7 @@ class SmartIntersection extends Intersection {
         System.out.println("Optimizing traffic at smart intersection: " + getLocation());
         for (BaseLight light : lights) {
             if (light instanceof TrafficLight) {
-                ((TrafficLight) light).setTimer(30); // Set shorter timer for faster traffic flow
+                ((TrafficLight) light).setTimer(30); 
             }
             light.displayStatus();
         }
