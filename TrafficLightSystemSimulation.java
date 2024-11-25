@@ -76,6 +76,7 @@ class TrafficLight {
     }
 }
 
+
 class PedestrianLight extends TrafficLight {
     private boolean walkSignal;
 
@@ -99,6 +100,7 @@ class PedestrianLight extends TrafficLight {
         System.out.println("Pedestrian walk signal: " + (walkSignal ? "ON" : "OFF"));
     }
 }
+
 
 class Intersection {
     protected TrafficLight[] trafficLights;
@@ -138,6 +140,7 @@ class Intersection {
     }
 }
 
+
 class SmartIntersection extends Intersection {
     public SmartIntersection(TrafficLight[] lights, String loc) {
         super(lights, loc);
@@ -146,18 +149,36 @@ class SmartIntersection extends Intersection {
     public void optimizeTraffic() {
         System.out.println("Optimizing traffic at smart intersection: " + getLocation());
         for (TrafficLight light : trafficLights) {
+
+            light.setTimer(30); 
             light.setTimer(30); // Reduce timer for faster flow
             light.displayStatus();
         }
     }
 }
 
+
+class IntersectionUI {
+    private final Scanner scanner = new Scanner(System.in);
+
+    public String getLocationInput() {
+        System.out.println("Enter the location for the intersection:");
+        return scanner.nextLine();
+    }
+
+    public void closeScanner() {
+        scanner.close();
+    }
+}
+
+
+
+
 public class TrafficLightSystemSimulation {
     public static void main(String[] args) throws InterruptedException {
-        Scanner scanner = new Scanner(System.in);
+        IntersectionUI ui = new IntersectionUI();
 
-        System.out.println("Enter the location for the intersection:");
-        String location = scanner.nextLine();
+        String location = ui.getLocationInput();
 
         TrafficLight[] lights = new TrafficLight[2];
         AbstractclassandVirtualFunction
@@ -180,6 +201,6 @@ public class TrafficLightSystemSimulation {
         TrafficLight.displayTotalLights();
 
         intersection.cleanupTrafficLights();
-        scanner.close();
+        ui.closeScanner();
     }
 }
